@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="public/icons/icon-192x192.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1976d2" />
+    <meta name="description" content="Plataforma de intercambio de servicios por tiempo" />
+    <link rel="apple-touch-icon" href="public/icons/icon-192x192.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Tiempo x Tiempo</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+              console.log('ServiceWorker registrado:', registration);
+            })
+            .catch(error => {
+              console.log('Error al registrar ServiceWorker:', error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
