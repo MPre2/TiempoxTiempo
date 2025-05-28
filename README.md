@@ -114,7 +114,7 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ## 👥 Autores
 
-- **Matias Presta** - *Desarrollo inicial* - [TuUsuario](https://github.com/MPre2)
+- **Matias Presta** - *Desarrollo inicial* - [MPre2](https://github.com/MPre2)
 
 ## 🙏 Agradecimientos
 
