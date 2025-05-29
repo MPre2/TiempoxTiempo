@@ -19,30 +19,21 @@ Tiempo x Tiempo es una plataforma innovadora que permite a los usuarios intercam
   - Vite
   - Material-UI (MUI)
   - React Router
-  - Redux Toolkit
-  - Socket.IO Client
+  - Firebase (Authentication, Firestore, Cloud Messaging)
   - PWA (Progressive Web App)
-
-- **Backend**:
-  - Node.js
-  - Express
-  - Socket.IO
-  - MongoDB
-  - JWT Authentication
 
 ## 📋 Requisitos Previos
 
 - Node.js (v18 o superior)
 - npm o yarn
-- MongoDB
-- Cuenta de Google Cloud (para autenticación)
+- Cuenta de Firebase
 
 ## 🔧 Instalación
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/tu-usuario/tiempox-tiempo.git
-   cd tiempox-tiempo
+   git clone https://github.com/MPre2/tiempoxtiempo.git
+   cd tiempoxtiempo
    ```
 
 2. **Instalar dependencias**:
@@ -50,12 +41,28 @@ Tiempo x Tiempo es una plataforma innovadora que permite a los usuarios intercam
    npm install
    ```
 
-3. **Configurar variables de entorno**:
+3. **Configurar Firebase**:
+   - Crea un proyecto en [Firebase Console](https://console.firebase.google.com/)
+   - Habilita Authentication con Email/Password
+   - Crea una base de datos en Firestore
+   - Habilita Cloud Messaging para las notificaciones
+   - Obtén las credenciales de configuración
+
+4. **Configurar variables de entorno**:
    - Crea un archivo `.env` en la raíz del proyecto
    - Copia el contenido de `.env.example`
-   - Completa las variables con tus credenciales
+   - Completa las variables con tus credenciales de Firebase:
+   ```env
+   VITE_FIREBASE_API_KEY=tu-api-key
+   VITE_FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=tu-proyecto
+   VITE_FIREBASE_STORAGE_BUCKET=tu-proyecto.appspot.com
+   VITE_FIREBASE_MESSAGING_SENDER_ID=tu-messaging-sender-id
+   VITE_FIREBASE_APP_ID=tu-app-id
+   VITE_FIREBASE_VAPID_KEY=tu-vapid-key
+   ```
 
-4. **Iniciar el servidor de desarrollo**:
+5. **Iniciar el servidor de desarrollo**:
    ```bash
    npm run dev
    ```
@@ -74,39 +81,32 @@ Tiempo x Tiempo es una plataforma innovadora que permite a los usuarios intercam
 2. Haz clic en el icono de instalación en la barra de direcciones
 3. Sigue las instrucciones para instalar la aplicación
 
-## 🔐 Variables de Entorno
-
-```env
-VITE_API_URL=http://localhost:3000
-VITE_GOOGLE_CLIENT_ID=tu-client-id
-VITE_SOCKET_URL=http://localhost:3000
-```
-
 ## 📁 Estructura del Proyecto
 
 ```
-tiempox-tiempo/
+tiempoxtiempo/
 ├── public/
 │   ├── icons/          # Iconos de la PWA
 │   └── manifest.json   # Configuración PWA
 ├── src/
 │   ├── components/     # Componentes reutilizables
+│   ├── config/        # Configuración de Firebase
+│   ├── contexts/      # Contextos de React
+│   ├── hooks/         # Hooks personalizados
 │   ├── pages/         # Páginas de la aplicación
-│   ├── services/      # Servicios y APIs
-│   ├── store/         # Estado global (Redux)
+│   ├── services/      # Servicios de Firebase
 │   ├── types/         # Definiciones de TypeScript
 │   └── utils/         # Utilidades y helpers
-├── scripts/           # Scripts de utilidad
-└── tests/            # Pruebas
 ```
 
 ## 🤝 Contribuir
 
-1. Haz un Fork del proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Revisa los [issues existentes](https://github.com/MPre2/tiempoxtiempo/issues)
+2. Haz un Fork del proyecto
+3. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+4. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+5. Push a la rama (`git push origin feature/AmazingFeature`)
+6. Abre un Pull Request
 
 ## 📝 Licencia
 
@@ -118,8 +118,8 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ## 🙏 Agradecimientos
 
+- Firebase por su excelente suite de servicios
 - Material-UI por el increíble framework de componentes
-- Socket.IO por la implementación de tiempo real
 - La comunidad de React por su excelente documentación
 
 ## 📞 Soporte
