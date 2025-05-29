@@ -1,50 +1,60 @@
-import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, updateDoc, orderBy, limit, Timestamp, onSnapshot } from 'firebase/firestore';
-import app from '../config/firebase';
+import { collection, doc, setDoc, getDoc, getDocs, query, where, updateDoc, orderBy, limit, Timestamp, onSnapshot } from 'firebase/firestore';
+import { db } from '../config/firebase';
 import type { User } from '../types';
 import type { Notification, NotificationSettings } from '../types/notification';
 import { getMessaging, getToken } from 'firebase/messaging';
+import app from '../config/firebase';
 
-const db = getFirestore(app);
 const messaging = getMessaging(app);
 
 export const notificationService = {
   // Gestión de notificaciones
   async createNotification(notification: Omit<Notification, 'id' | 'createdAt' | 'read'>): Promise<string> {
-    const notificationsRef = collection(db, 'notifications');
-    const newNotificationRef = doc(notificationsRef);
-    const now = Timestamp.now();
+    try {
+      const notificationsRef = collection(db, 'notifications');
+      const newNotificationRef = doc(notificationsRef);
+      const now = Timestamp.now();
 
-    const newNotification: Notification = {
-      ...notification,
-      id: newNotificationRef.id,
-      createdAt: now,
-      read: false
-    };
+      const newNotification: Notification = {
+        ...notification,
+        id: newNotificationRef.id,
+        createdAt: now,
+        read: false
+      };
 
-    await setDoc(newNotificationRef, newNotification);
+      await setDoc(newNotificationRef, newNotification);
 
-    // Verificar configuración de notificaciones del usuario
-    const userRef = doc(db, 'users', notification.userId);
-    const userSnap = await getDoc(userRef);
-    const userData = userSnap.data() as User;
+      // Verificar configuración de notificaciones del usuario
+      const userRef = doc(db, 'users', notification.userId);
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.data() as User;
 
-    if (userData.notificationSettings[notification.type] && userData.fcmToken) {
-      await this.sendPushNotification(userData.fcmToken, newNotification);
+      if (userData?.notificationSettings?.[notification.type] && userData.fcmToken) {
+        await this.sendPushNotification(userData.fcmToken, newNotification);
+      }
+
+      return newNotificationRef.id;
+    } catch (error) {
+      console.error('Error al crear notificación:', error);
+      throw error;
     }
-
-    return newNotificationRef.id;
   },
 
   async getNotifications(userId: string, limit: number = 50): Promise<Notification[]> {
-    const notificationsRef = collection(db, 'notifications');
-    const q = query(
-      notificationsRef,
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-      limit(limit)
-    );
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => doc.data() as Notification);
+    try {
+      const notificationsRef = collection(db, 'notifications');
+      const q = query(
+        notificationsRef,
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        limit(limit)
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => doc.data() as Notification);
+    } catch (error) {
+      console.error('Error al obtener notificaciones:', error);
+      return [];
+    }
   },
 
   async markNotificationAsRead(notificationId: string): Promise<void> {
@@ -143,17 +153,28 @@ export const notificationService = {
 
   // Suscripción a notificaciones en tiempo real
   subscribeToNotifications(userId: string, callback: (notifications: Notification[]) => void) {
-    const notificationsRef = collection(db, 'notifications');
-    const q = query(
-      notificationsRef,
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-      limit(50)
-    );
-    
-    return onSnapshot(q, (snapshot) => {
-      const notifications = snapshot.docs.map(doc => doc.data() as Notification);
-      callback(notifications);
-    });
+    try {
+      const notificationsRef = collection(db, 'notifications');
+      const q = query(
+        notificationsRef,
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        limit(50)
+      );
+      
+      return onSnapshot(q, 
+        (snapshot) => {
+          const notifications = snapshot.docs.map(doc => doc.data() as Notification);
+          callback(notifications);
+        },
+        (error) => {
+          console.error('Error en la suscripción a notificaciones:', error);
+          callback([]);
+        }
+      );
+    } catch (error) {
+      console.error('Error al suscribirse a notificaciones:', error);
+      return () => {};
+    }
   }
 }; 
