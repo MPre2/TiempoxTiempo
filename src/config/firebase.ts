@@ -12,8 +12,18 @@ const firebaseConfig = {
 };
 
 // Log de la configuración
-console.log('Configuración Firebase:', firebaseConfig);
-
+// ************************************************
+// AÑADE ESTOS CONSOLE.LOG JUSTO AQUÍ
+console.log("--> Inspeccionando firebaseConfig ANTES de inicializar Firebase:");
+console.log("firebaseConfig entero:", firebaseConfig);
+console.log("Valor de apiKey:", firebaseConfig.apiKey);
+console.log("Tipo de apiKey:", typeof firebaseConfig.apiKey);
+console.log("Valor de appId:", firebaseConfig.appId);
+console.log("Tipo de appId:", typeof firebaseConfig.appId);
+console.log("Valor de projectId:", firebaseConfig.projectId);
+console.log("Tipo de projectId:", typeof firebaseConfig.projectId);
+console.log("<-- Fin de la inspección");
+// ************************************************
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
