@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -24,6 +24,7 @@ console.log("Valor de projectId:", firebaseConfig.projectId);
 console.log("Tipo de projectId:", typeof firebaseConfig.projectId);
 console.log("<-- Fin de la inspección");
 // ************************************************
+
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
