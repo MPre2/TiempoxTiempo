@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider } from 'styled-components';
 import { AuthProvider } from './contexts/AuthContext';
 import { Home } from './pages/Home';
 import { Login } from './components/auth/Login';
@@ -12,27 +13,25 @@ import { TimeBank } from './pages/TimeBank';
 import { ChatList } from './components/chat/ChatList';
 import { ChatWindow } from './components/chat/ChatWindow';
 import { Navbar } from './components/layout/Navbar';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#2196f3',
-    },
-    secondary: {
-      main: '#f50057',
-    },
-  },
-});
+import { lightTheme, darkTheme } from './styles/theme';
+import { GlobalStyle } from './styles/GlobalStyles';
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <GlobalStyle />
       <AuthProvider>
         <Router future={{ 
           v7_startTransition: true,
           v7_relativeSplatPath: true 
         }}>
-          <Navbar />
+          <Navbar onThemeToggle={toggleTheme} isDarkMode={isDarkMode} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
