@@ -25,7 +25,7 @@ function App() {
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
-      <GlobalStyle />
+      <GlobalStyle theme={isDarkMode ? darkTheme : lightTheme} />
       <AuthProvider>
         <Router future={{ 
           v7_startTransition: true,
